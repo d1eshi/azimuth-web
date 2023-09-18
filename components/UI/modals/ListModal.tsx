@@ -31,17 +31,27 @@ export const VenueModal: FC<Props> = ({ venueFeature }) => {
       <div className='w-full h-36 bg-white'></div>
       {/* <img src='' alt='' /> */}
       <div className='p-2 flex flex-col gap-2 text-slate-400'>
-        <p className='text-xl clamp text-white'>Madison Square Garden</p>
+        <p className='text-xl clamp text-white capitalize'>{venueFeature.name}</p>
         <p className='bg-[#1e1934] text-white rounded-lg px-1.5 w-min text-[.6rem] uppercase tracking-widest'>venues</p>
-        <p className='text-slate-400'>20000 seats - New York, NY</p>
-        {propertyEntries.map(([propertyName, propertyValue]) => (
-          <p className='flex items-baseline justify-between text-xs text-slate-400' key={propertyName}>
-            <span className='bg-[#1e1934] rounded-lg px-1.5 w-min text-[.6rem] text-white uppercase tracking-widest'>
-              {propertyName}
-            </span>
-            {propertyValue}
-          </p>
-        ))}
+        <p className='text-slate-400'>
+          {venueFeature.capacity} seats - {venueFeature.city}
+        </p>
+
+        <div className='flex flex-col gap-[6px]'>
+          {propertyEntries.map(([propertyName, propertyValue]) => (
+            <div
+              className='flex items-baseline justify-between gap-6 text-sm text-slate-400 capitalize'
+              key={propertyName}
+            >
+              <p className='bg-[#1e1934] rounded-lg px-1.5 w-min text-[.6rem] text-white uppercase tracking-widest'>
+                {propertyName}
+              </p>
+              <p className='capitalize line-clamp-1' key={propertyName}>
+                {propertyValue}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )
