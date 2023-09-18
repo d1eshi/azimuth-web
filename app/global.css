@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+}
+.mapboxgl-popup-content {
+  padding: 0;
+}
+
+.popupMapBox .mapboxgl-popup-content {
+  background: none;
+  padding: 0;
+}
+
+.popupMapBox .mapboxgl-popup-tip {
+  display: none;
+}
+
+.react-icon path {
+  stroke: rgb(226 232 240 / var(--tw-text-opacity));
+  /* fill: white; */
+}
+
+/* remove controls from mapbox */
+.mapboxgl-map .mapboxgl-control-container {
+  display: 'none';
+}
+.mapboxgl-map div[mapboxgl-children] {
+  display: 'none';
+}
+
+.mapboxgl-ctrl-bottom-right {
+  display: none;
+}
+
+.mapboxgl-ctrl-bottom-left {
+  display: none;
+}
+
+/* marker venues */
+
+.mapboxgl-marker .mapboxgl-marker-anchor-center svg {
+  display: none;
+}
