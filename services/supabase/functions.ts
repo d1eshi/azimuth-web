@@ -132,7 +132,7 @@ export type MyData = Awaited<ReturnType<typeof getMarketsData>>
 
 export const getVenuesData = async () => {
   try {
-    const { data, error } = await supabase.from('azimuth_venues_duplicate_2').select('*').eq('country', 'US').limit(10)
+    const { data, error } = await supabase.from('azimuth_venues_duplicate_2').select('*').eq('country', 'US').limit(50)
     if (!data?.length) throw new Error(`Error: ${error?.message}`)
 
     // console.log(data, 'from getVnues')

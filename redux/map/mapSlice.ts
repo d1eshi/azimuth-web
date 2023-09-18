@@ -43,10 +43,10 @@ const initialState = {
   },
   mapInfo: {
     layers: [
-      {
-        layerId: 0,
-        config: { label: 'events', isVisible: false },
-      },
+      // {
+      //   layerId: 0,
+      //   config: { label: 'events', isVisible: false },
+      // },
       {
         layerId: 1,
         config: { label: 'venues', isVisible: false },
@@ -59,10 +59,10 @@ const initialState = {
         layerId: 3,
         config: { label: 'markets', isVisible: false },
       },
-      {
-        layerId: 4,
-        config: { label: 'stations', isVisible: false },
-      },
+      // {
+      //   layerId: 4,
+      //   config: { label: 'stations', isVisible: false },
+      // },
     ],
     data: {
       marketsData: { features: [], type: 'FeatureCollection' },
