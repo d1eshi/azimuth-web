@@ -8,6 +8,8 @@ import {
   VenueFeature,
   VenueFeatureProperties,
 } from '@/interfaces/GeoJson'
+import { setModalData } from '@/redux/UISlice'
+import { useAppDispatch } from '@/redux/hooks'
 import React, { FC } from 'react'
 import { SiAirplayaudio } from 'react-icons/si'
 import { VscAccount } from 'react-icons/vsc'
@@ -22,8 +24,6 @@ interface Props {
 }
 
 export const VenueModal: FC<Props> = ({ venueFeature }) => {
-  console.log({ venueFeature })
-
   if (!venueFeature) return
   const propertyEntries = Object.entries(venueFeature)
   return (
@@ -34,23 +34,26 @@ export const VenueModal: FC<Props> = ({ venueFeature }) => {
         <p className='text-xl clamp text-white capitalize'>{venueFeature.name}</p>
         <p className='bg-[#1e1934] text-white rounded-lg px-1.5 w-min text-[.6rem] uppercase tracking-widest'>venues</p>
         <p className='text-slate-400'>
-          {venueFeature.capacity} seats - {venueFeature.city}
+          {venueFeature.capacity || 500} seats - {venueFeature.city}
         </p>
 
         <div className='flex flex-col gap-[6px]'>
-          {propertyEntries.map(([propertyName, propertyValue]) => (
-            <div
-              className='flex items-baseline justify-between gap-6 text-sm text-slate-400 capitalize'
-              key={propertyName}
-            >
-              <p className='bg-[#1e1934] rounded-lg px-1.5 w-min text-[.6rem] text-white uppercase tracking-widest'>
-                {propertyName}
-              </p>
-              <p className='capitalize line-clamp-1' key={propertyName}>
-                {propertyValue}
-              </p>
-            </div>
-          ))}
+          {propertyEntries.map(([propertyName, propertyValue]) => {
+            if (propertyName && propertyValue === null) return
+            return (
+              <div
+                className='flex items-baseline justify-between gap-6 text-sm text-slate-400 capitalize'
+                key={propertyName}
+              >
+                <p className='bg-[#1e1934] rounded-lg px-1.5 w-min text-[.6rem] text-white uppercase tracking-widest'>
+                  {propertyName}
+                </p>
+                <p className='capitalize line-clamp-1' key={propertyName}>
+                  {propertyValue}
+                </p>
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>
@@ -58,20 +61,14 @@ export const VenueModal: FC<Props> = ({ venueFeature }) => {
 }
 
 export const MarketModal: FC<Props> = ({ marketFeature, airplayDevices, subDMAs }) => {
-  console.log({ airplayDevices, marketFeature }, 'let see modal')
-
-  // if (!marketFeature || !airplayDevices?.length || subDMAs === undefined) return
-  // let marketFeatureNameFormatted = marketFeature?.name.replace(/\s*-\s*/g, '-')
-  // const subdmaFound = subDMAs.filter(subdma => subdma.name === marketFeatureNameFormatted)
-  // if (subdmaFound.length) {
-  //   const subDmaDetails = JSON.parse(subdmaFound[0].subdma)
-  //   // subdmaFound[0].subdma
-  // }
-
+  const dispatch = useAppDispatch()
   if (!marketFeature || !airplayDevices?.length) return
   const { name } = marketFeature
 
-  // const propertyEntries = Object.entries(marketFeature)
+  const handleClickAirplayDevice = (airplay: AirplayDevice) => {
+    dispatch(setModalData({ data: airplay, type: 'airplay' }))
+  }
+
   return (
     <div className='absolute border border-gray-700 rounded right-0 top-0 mt-2 mr-4 w-64 min-h-screen  bg-[#131315] text-white flex flex-col'>
       <div className='w-full h-36 bg-white'></div>
@@ -102,20 +99,24 @@ export const MarketModal: FC<Props> = ({ marketFeature, airplayDevices, subDMAs 
 
         <div className='overflow-auto'>
           {airplayDevices?.map(device => {
+            const title = device.title.replace(/["']/g, '')
+            const artist = device.artist.replace(/["']/g, '')
+
             return (
               <div
                 className='flex gap-3 p-2 items-center text-white bg-black border-2 border-gray-800 rounded cursor-pointer'
                 key={device.id}
+                onClick={() => handleClickAirplayDevice(device)}
               >
                 <div className='p-2 bg-[#0b0b0b] rounded'>
                   <VscAccount fontSize='1.7rem' />
                 </div>
                 <div>
-                  <p className='capitalize'>{device.title}</p>
+                  <p className='capitalize'>{artist}</p>
                   <span className='bg-[#1e1934] font-medium rounded-lg p-1 text-[.6rem] text-white uppercase tracking-widest'>
                     {'airplay'}
                   </span>
-                  <p className='capitalize text-sm text-slate-400'>{device.artist}</p>
+                  <p className='capitalize text-sm text-slate-400'>{title}</p>
                 </div>
               </div>
             )
@@ -156,6 +157,43 @@ export const CustomModal: FC<Props> = ({ deviceFeature }) => {
             {propertyValue}
           </p>
         ))}
+      </div>
+    </div>
+  )
+}
+
+export const AirplayModal: FC<{ airplayDevice: AirplayDevice }> = ({ airplayDevice }) => {
+  // console.log({ airplayDevices, marketFeature }, 'let see modal')
+
+  const propertyEntries = Object.entries(airplayDevice)
+
+  return (
+    <div className='absolute border border-gray-700 rounded right-0 top-0 mt-2 mr-4 w-64 min-h-screen  bg-[#131315] text-white flex flex-col'>
+      <div className='w-full h-36 bg-white'></div>
+      {/* <img src='' alt='' /> */}
+      <div className='p-2 flex flex-col  max-h-[78vh] gap-3 text-slate-400'>
+        <p className='text-xl clamp text-white'>{airplayDevice.title}</p>
+        <p className='bg-[#1e1934]  font-medium text-white rounded-lg px-3 py-.5 w-min text-[.6rem] uppercase tracking-widest'>
+          airplay
+        </p>
+        <p className='text-slate-400'>{airplayDevice.artist}</p>
+        <div className='overflow-auto'>
+          {propertyEntries.map(([propertyName, propertyValue]) => {
+            return (
+              <div
+                className='flex items-baseline justify-between gap-6 text-sm text-slate-400 capitalize'
+                key={propertyName}
+              >
+                <p className='bg-[#1e1934] rounded-lg px-1.5 w-min text-[.6rem] text-white uppercase tracking-widest'>
+                  {propertyName}
+                </p>
+                <p className='capitalize line-clamp-1' key={propertyName}>
+                  {propertyValue}
+                </p>
+              </div>
+            )
+          })}
+        </div>
       </div>
     </div>
   )

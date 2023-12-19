@@ -1,4 +1,5 @@
 import {
+  AirplayDevice,
   DeviceFeature,
   DeviceFeatureProperties,
   MarketFeature,
@@ -9,17 +10,14 @@ import {
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { GeoJsonProperties } from 'geojson'
 
-type ModalTypes = 'market' | 'venue' | 'devices' | ''
+type ModalTypes = 'market' | 'venue' | 'devices' | 'airplay' | ''
 // export type ModalData = VenueFeature | GeoJsonProperties | null
 
 interface UIState {
   showModal: {
     show: boolean
     type: ModalTypes
-
-    venue?: VenueFeatureProperties
-    market?: MarketFeatureProperties
-    devices?: DeviceFeatureProperties
+    data?: VenueFeatureProperties | MarketFeatureProperties | DeviceFeature | AirplayDevice | []
   }
 }
 
@@ -31,7 +29,7 @@ const initialState = {
 } as UIState
 
 interface PayloadModal {
-  data: GeoJsonProperties
+  data: any
   type: ModalTypes
 }
 
@@ -43,13 +41,13 @@ const UI = createSlice({
       // console.log({ action }, 'from setShowModal redux')
       state.showModal = {
         show: true,
-        [action.payload.type]: [],
+        data: [],
         type: action.payload.type,
       }
 
       state.showModal = {
         show: true,
-        [action.payload.type]: action.payload.data,
+        data: action.payload.data,
         type: action.payload.type,
       }
     },

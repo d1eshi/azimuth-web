@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { CustomModal, MarketModal, VenueModal } from './ListModal'
+import { AirplayModal, CustomModal, MarketModal, VenueModal } from './ListModal'
 import { useAppSelector } from '@/redux/hooks'
 // import { VenueModal, MarketModal } from './Modals';
 
@@ -16,13 +16,16 @@ export const DynamicModal = () => {
   // Revisamos el tipo de modal activo
   switch (showModal.type) {
     case 'venue':
-      modalComponent = <VenueModal venueFeature={showModal?.venue} />
+      modalComponent = <VenueModal venueFeature={showModal?.data} />
       break
     case 'market':
-      modalComponent = <MarketModal marketFeature={showModal?.market} airplayDevices={data.airplayDevicesData} />
+      modalComponent = <MarketModal marketFeature={showModal?.data} airplayDevices={data.airplayDevicesData} />
+      break
+    case 'airplay':
+      modalComponent = <AirplayModal airplayDevice={showModal.data} />
       break
     case 'devices':
-      modalComponent = <CustomModal deviceFeature={showModal?.devices} />
+      modalComponent = <CustomModal deviceFeature={showModal?.data} />
       break
     default:
       modalComponent = null // Puedes manejar otros casos aquí si es necesario
